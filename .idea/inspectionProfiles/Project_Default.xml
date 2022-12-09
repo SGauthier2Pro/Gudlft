@@ -1,0 +1,51 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="6">
+            <item index="0" class="java.lang.String" itemvalue="Django" />
+            <item index="1" class="java.lang.String" itemvalue="asgiref" />
+            <item index="2" class="java.lang.String" itemvalue="pytz" />
+            <item index="3" class="java.lang.String" itemvalue="Pillow" />
+            <item index="4" class="java.lang.String" itemvalue="sqlparse" />
+            <item index="5" class="java.lang.String" itemvalue="django-star-ratings" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="blog.models.Photo.objects" />
+          <option value="blog.models.Blog.objects" />
+          <option value="django.db.models.fields.CharField.split" />
+          <option value="django.db.models.fields.files.ImageField.path" />
+          <option value="review.models.Ticket.objects" />
+          <option value="review.models.Review.objects" />
+          <option value="review.models.UserFollows.objects" />
+          <option value="django.contrib.auth.models.User.DoesNotExist" />
+          <option value="shop.models.Category.objects" />
+          <option value="shop.models.Product.objects" />
+          <option value="shop.models.Article.objects" />
+          <option value="object.get_serializer_class" />
+          <option value="projects.views.MultipleSerializerMixin.action" />
+          <option value="projects.models.Project.objects" />
+          <option value="projects.models.Issue.objects" />
+          <option value="projects.models.Contributor.objects" />
+          <option value="projects.models.Comment.objects" />
+          <option value="projects.models.project.Project.objects" />
+          <option value="projects.models.issue.Issue.objects" />
+          <option value="projects.views.multipleserializermixin.MultipleSerializerMixin.action" />
+          <option value="projects.models.contributor.Contributor.objects" />
+          <option value="projects.models.comment.Comment.objects" />
+          <option value="django_pytest.django_pytest.urls.library" />
+          <option value="library.models.Book.objects" />
+          <option value="favourites.models.FavouriteProduct.objects" />
+          <option value="products.models.Product.objects" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
