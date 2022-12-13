@@ -3,19 +3,20 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 
 
 def load_clubs():
-    with open('clubs.json') as c:
-        list_of_clubs = json.load(c)['clubs']
+    with open('clubs.json') as clubs_file:
+        list_of_clubs = json.load(clubs_file)['clubs']
         return list_of_clubs
 
 
 def load_competitions():
-    with open('competitions.json') as comps:
-        list_of_competitions = json.load(comps)['competitions']
+    with open('competitions.json') as competitions_file:
+        list_of_competitions = json.load(competitions_file)['competitions']
         return list_of_competitions
 
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
+
 
 competitions = load_competitions()
 clubs = load_clubs()
@@ -29,7 +30,9 @@ def index():
 @app.route('/show_summary', methods=['POST'])
 def show_summary():
     club = [
-        club for club in clubs if club['email'] == request.form['email']
+        club
+        for club in clubs
+        if club['email'] == request.form['email']
     ][0]
     return render_template('welcome.html',
                            club=club,
@@ -39,11 +42,13 @@ def show_summary():
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
     found_club = [
-        club_to_find for club_to_find in clubs
+        club_to_find
+        for club_to_find in clubs
         if club_to_find['name'] == club
     ][0]
     found_competition = [
-        competition_to_find for competition_to_find in competitions
+        competition_to_find
+        for competition_to_find in competitions
         if competition_to_find['name'] == competition
     ][0]
     if found_club and found_competition:
@@ -59,10 +64,16 @@ def book(competition, club):
 
 @app.route('/purchase_places', methods=['POST'])
 def purchase_places():
-    competition = [competition for competition in competitions
-                   if competition['name'] == request.form['competition']][0]
-    club = [club for club in clubs
-            if club['name'] == request.form['club']][0]
+    competition = [
+        competition
+        for competition in competitions
+        if competition['name'] == request.form['competition']
+    ][0]
+    club = [
+        club
+        for club in clubs
+        if club['name'] == request.form['club']
+    ][0]
     places_required = int(request.form['places'])
     competition['numberOfPlaces'] = \
         int(competition['numberOfPlaces']) - places_required
