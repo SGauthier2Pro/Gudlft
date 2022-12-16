@@ -34,7 +34,9 @@ class TestServer:
             data=dict(email='unknown@email.net'),
             follow_redirects=True
         )
-        assert response.status_code == 401
+        assert response.status_code == 200
+        data = response.data.decode()
+        assert data.find("This email is not registered !")
 
     def test_book_route_with_good_competition_and_good_club(self, client):
         clubs = load_clubs()
