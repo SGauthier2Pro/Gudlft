@@ -4,16 +4,14 @@ import server
 
 @pytest.fixture
 def client():
-    app = server.app
-    app.testing = True
-
-    with app.test_client() as client:
-        yield client
+    server.app.config['TESTING'] = True
+    client = server.app.test_client()
+    return client
 
 
-'''def clubs(mocker):
-    mocker.patch('server.load_clubs',
-                 return_value=[
+@pytest.fixture
+def mock_clubs(mocker):
+    clubs = [
                      {
                          "name": "club 1",
                          "email": "john@club1.net",
@@ -30,24 +28,30 @@ def client():
                          "points": "12"
                      }
                  ]
-                 )
-    return server.load_clubs()
+    mocked_clubs = mocker.patch.object(server, 'clubs', clubs)
+    yield mocked_clubs
 
 
-def competitions(mocker):
-    mocker.patch('server.load_competitions',
-                 return_value=[
+@pytest.fixture
+def mock_competitions(mocker):
+    competitions = [
                      {
-                         "name": "Spring Festival",
-                         "date": "2020-03-27 10:00:00",
+                         "name": "Test competition 1",
+                         "date": "2023-03-27 10:00:00",
                          "numberOfPlaces": "25"
                      },
                      {
-                         "name": "Fall Classic",
+                         "name": "Test competition 2",
                          "date": "2020-10-22 13:30:00",
                          "numberOfPlaces": "13"
+                     },
+                     {
+                         "name": "Test competition 3",
+                         "date": "2023-10-22 13:30:00",
+                         "numberOfPlaces": "3"
                      }
                  ]
-                 )
-
-    return server.load_competitions()'''
+    mocked_competitions = mocker.patch.object(server,
+                                              'competitions',
+                                              competitions)
+    yield mocked_competitions
