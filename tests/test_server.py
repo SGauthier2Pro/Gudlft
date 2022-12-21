@@ -65,9 +65,11 @@ class TestServer:
         data = response.data.decode()
         assert data.find("Something went wrong-please try again") != -1
 
-    def test_book_route_with_good_competition_and_unknown_club(self,
-                                                               client,
-                                                               mock_competitions):
+    def test_book_route_with_good_competition_and_unknown_club(
+            self,
+            client,
+            mock_competitions
+    ):
         club = 'wrong club'
         competitions = mock_competitions
         competition = competitions[0]['name']
@@ -86,6 +88,23 @@ class TestServer:
         assert response.status_code == 200
         data = response.data.decode()
         assert data.find("Something went wrong-please try again") != -1
+
+    def test_book_route_with_past_competition_and_valid_club(
+            self,
+            client,
+            mock_clubs,
+            mock_competitions
+    ):
+        competitions = mock_competitions
+        competition = competitions[1]['name']
+        clubs = mock_clubs
+        club = clubs[0]['name']
+
+        response = client.get(f'/book/{competition}/{club}')
+        assert response.status_code == 200
+        data = response.data.decode()
+        assert data.find("You can not book "
+                         "places for a past competition") != -1
 
     def test_purchase_places_with_club_competition_required_places(
             self,
