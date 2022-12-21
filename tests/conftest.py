@@ -15,17 +15,25 @@ def mock_clubs(mocker):
                      {
                          "name": "club 1",
                          "email": "john@club1.net",
-                         "points": "13"
+                         "points": "16",
+                         "booked":
+                             {
+                                 "Test competition 2": 5,
+                                 "Test competition 1": 1
+                             }
+
                      },
                      {
                          "name": "club 2",
                          "email": "admin@club2.com",
-                         "points": "4"
+                         "points": "4",
+                         "booked": {}
                      },
                      {
                          "name": "club 3",
-                         "email": "kate@club3uk",
-                         "points": "12"
+                         "email": "kate@club3.uk",
+                         "points": "12",
+                         "booked": {}
                      }
                  ]
     mocked_clubs = mocker.patch.object(server, 'clubs', clubs)

@@ -1,7 +1,6 @@
 import tests.conftest
 from tests.conftest import client, mock_clubs, mock_competitions
 import server
-from server import load_clubs, load_competitions
 
 
 class TestServer:
@@ -42,17 +41,22 @@ class TestServer:
         data = response.data.decode()
         assert data.find("This email is not registered !")
 
-    def test_book_route_with_good_competition_and_good_club(self, client):
-        clubs = load_clubs()
+    def test_book_route_with_good_competition_and_good_club(self,
+                                                            client,
+                                                            mock_clubs,
+                                                            mock_competitions):
+        clubs = mock_clubs
         club = clubs[0]['name']
-        competitions = load_competitions()
+        competitions = mock_competitions
         competition = competitions[0]['name']
 
         response = client.get(f'/book/{competition}/{club}')
         assert response.status_code == 200
 
-    def test_book_route_with_unknown_competition_and_good_club(self, client):
-        clubs = load_clubs()
+    def test_book_route_with_unknown_competition_and_good_club(self,
+                                                               client,
+                                                               mock_clubs):
+        clubs = mock_clubs
         club = clubs[0]['name']
         competition = 'wrong competition'
 
@@ -61,9 +65,11 @@ class TestServer:
         data = response.data.decode()
         assert data.find("Something went wrong-please try again") != -1
 
-    def test_book_route_with_good_competition_and_unknown_club(self, client):
+    def test_book_route_with_good_competition_and_unknown_club(self,
+                                                               client,
+                                                               mock_competitions):
         club = 'wrong club'
-        competitions = load_competitions()
+        competitions = mock_competitions
         competition = competitions[0]['name']
 
         response = client.get(f'/book/{competition}/{club}')
@@ -81,11 +87,15 @@ class TestServer:
         data = response.data.decode()
         assert data.find("Something went wrong-please try again") != -1
 
-    def test_purchase_places_with_club_competition_required_places(self,
-                                                                   client):
-        competitions = load_competitions()
+    def test_purchase_places_with_club_competition_required_places(
+            self,
+            client,
+            mock_clubs,
+            mock_competitions
+    ):
+        competitions = mock_competitions
         competition = competitions[0]['name']
-        clubs = load_clubs()
+        clubs = mock_clubs
         club = clubs[0]['name']
         required_places = '10'
 
@@ -108,8 +118,10 @@ class TestServer:
                          f"Number of Places: {competition_places_rest}") != -1
         assert data.find(f"Points available: {club_points_left}") != -1
 
-    def test_purchase_places_with_unknown_club(self, client):
-        competitions = load_competitions()
+    def test_purchase_places_with_unknown_club(self,
+                                               client,
+                                               mock_competitions):
+        competitions = mock_competitions
         competition = competitions[0]['name']
         club = 'wrong club'
         required_places = '10'
@@ -124,9 +136,11 @@ class TestServer:
 
         assert data.find("Club does not existes !") != -1
 
-    def test_purchase_places_with_unknown_competition(self, client):
+    def test_purchase_places_with_unknown_competition(self,
+                                                      client,
+                                                      mock_clubs):
         competition = 'wrong competition'
-        clubs = load_clubs()
+        clubs = mock_clubs
         club = clubs[0]['name']
         required_places = '10'
 
@@ -140,13 +154,17 @@ class TestServer:
 
         assert data.find("Competition does not existes !") != -1
 
-    def test_purchase_places_with_more_than_twelve_required_places(self,
-                                                                   client):
-        competitions = load_competitions()
+    def test_purchase_places_with_more_than_twelve_required_places(
+            self,
+            client,
+            mock_clubs,
+            mock_competitions
+    ):
+        competitions = mock_competitions
         competition = competitions[0]['name']
-        clubs = load_clubs()
+        clubs = mock_clubs
         club = clubs[0]['name']
-        required_places = '15'
+        required_places = '12'
 
         response = client.post('/purchase_places',
                                data=dict(places=required_places,
@@ -156,13 +174,18 @@ class TestServer:
         assert response.status_code == 200
         data = response.data.decode()
 
-        assert data.find("You can not purchase more than 12 places!") != -1
+        assert data.find("You can not purchase "
+                         "more than 12 places per event!") != -1
 
-    def test_purchase_places_with_not_enough_available_points(self,
-                                                              client):
-        competitions = load_competitions()
+    def test_purchase_places_with_not_enough_available_points(
+            self,
+            client,
+            mock_clubs,
+            mock_competitions
+    ):
+        competitions = mock_competitions
         competition = competitions[0]['name']
-        clubs = load_clubs()
+        clubs = mock_clubs
         club = clubs[1]['name']
         required_places = '10'
 
@@ -176,11 +199,15 @@ class TestServer:
 
         assert data.find("Not enough available points!") != -1
 
-    def test_purchase_places_with_not_enough_available_places(self,
-                                                              client):
-        competitions = load_competitions()
+    def test_purchase_places_with_not_enough_available_places(
+            self,
+            client,
+            mock_clubs,
+            mock_competitions
+    ):
+        competitions = mock_competitions
         competition = competitions[0]['name']
-        clubs = load_clubs()
+        clubs = mock_clubs
         club = clubs[1]['name']
         required_places = '10'
 
@@ -195,10 +222,12 @@ class TestServer:
         assert data.find("Not enough available places!") != -1
 
     def test_purchase_places_with_past_competition(self,
-                                                   client):
-        competitions = load_competitions()
+                                                   client,
+                                                   mock_clubs,
+                                                   mock_competitions):
+        competitions = mock_competitions
         competition = competitions[1]['name']
-        clubs = load_clubs()
+        clubs = mock_clubs
         club = clubs[0]['name']
         required_places = '10'
 

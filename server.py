@@ -67,6 +67,8 @@ def book(competition, club):
 
 @app.route('/purchase_places', methods=['POST'])
 def purchase_places():
+    allready_booked_places = 0
+
     competition = [
         competition
         for competition in competitions
@@ -77,21 +79,38 @@ def purchase_places():
         for club in clubs
         if club['name'] == request.form['club']
     ][0]
+
+    if club['booked'] != {}:
+        if competition['name'] in club['booked']:
+            allready_booked_places = club['booked'][competition['name']]
+        else:
+            club['booked'][competition['name']] = allready_booked_places
+    else:
+        club['booked'][competition['name']] = allready_booked_places
+
     places_required = int(request.form['places'])
+
     if int(club['points']) >= places_required:
-        club['points'] = int(club['points']) - places_required
-        competition['numberOfPlaces'] = \
-            int(competition['numberOfPlaces']) - places_required
-        club['booked'][competition['name']] += places_required
-        flash('Great-booking complete!')
-        return render_template('welcome.html',
-                               club=club,
-                               competitions=competitions)
+        if (allready_booked_places + places_required) <= 12:
+            club['points'] = int(club['points']) - places_required
+            competition['numberOfPlaces'] = \
+                int(competition['numberOfPlaces']) - places_required
+            club['booked'][competition['name']] = \
+                places_required + allready_booked_places
+            flash('Great-booking complete!')
+            return render_template('welcome.html',
+                                   club=club,
+                                   competitions=competitions)
+        else:
+            flash('You can not purchase more than 12 places per event!')
+            return render_template('booking.html',
+                                   club=club,
+                                   competition=competition)
     else:
         flash('Not enough available points!')
         return render_template('booking.html',
                                club=club,
-                               competitions=competitions)
+                               competition=competition)
 
 
 # TODO: Add route for points display
