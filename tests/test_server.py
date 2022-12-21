@@ -265,6 +265,28 @@ class TestServer:
         assert data.find("You can not purchase a "
                          "negative number of place !") != -1
 
+    def test_purchase_places_with_zero_required_places(
+            self,
+            client,
+            mock_clubs,
+            mock_competitions
+    ):
+        competitions = mock_competitions
+        competition = competitions[1]['name']
+        clubs = mock_clubs
+        club = clubs[0]['name']
+        required_places = '0'
+
+        response = client.post('/purchase_places',
+                               data=dict(places=required_places,
+                                         club=club,
+                                         competition=competition),
+                               follow_redirects=True)
+        assert response.status_code == 200
+        data = response.data.decode()
+
+        assert data.find("You have not booked any place !") != -1
+
     def test_purchase_places_with_empty_required_places(
             self,
             client,
@@ -275,7 +297,7 @@ class TestServer:
         competition = competitions[1]['name']
         clubs = mock_clubs
         club = clubs[0]['name']
-        required_places = '-2'
+        required_places = ''
 
         response = client.post('/purchase_places',
                                data=dict(places=required_places,

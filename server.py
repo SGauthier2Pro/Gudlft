@@ -88,6 +88,22 @@ def purchase_places():
     else:
         club['booked'][competition['name']] = allready_booked_places
 
+    if request.form['places'] == "":
+        flash('You have to enter a number of place !')
+        return render_template('booking.html',
+                               club=club,
+                               competition=competition)
+    elif int(request.form['places']) < 0:
+        flash('You can not purchase a negative number of place !')
+        return render_template('booking.html',
+                               club=club,
+                               competition=competition)
+    elif int(request.form['places']) == 0:
+        flash('You have not booked any place !')
+        return render_template('welcome.html',
+                               club=club,
+                               competitions=competitions)
+
     places_required = int(request.form['places'])
 
     if int(club['points']) >= places_required:
