@@ -127,7 +127,8 @@ def purchase_places():
     if competition_date > datetime.now():
         if int(club['points']) >= places_required:
             if (allready_booked_places + places_required) <= 12:
-                club['points'] = int(club['points']) - places_required
+                club['points'] = \
+                    int(club['points']) - places_required
                 competition['numberOfPlaces'] = \
                     int(competition['numberOfPlaces']) - places_required
                 club['booked'][competition['name']] = \
