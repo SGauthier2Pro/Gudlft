@@ -69,12 +69,12 @@ def book(competition, club):
         else:
             flash("You can not book places for a past competition")
             return render_template('welcome.html',
-                                   club=club,
+                                   club=found_club,
                                    competitions=competitions)
     else:
         flash("Something went wrong-please try again")
         return render_template('welcome.html',
-                               club=club,
+                               club=found_club,
                                competitions=competitions)
 
 
