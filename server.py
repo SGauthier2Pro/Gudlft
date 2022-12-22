@@ -45,16 +45,29 @@ def show_summary():
 
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
-    found_club = [
-        club_to_find
-        for club_to_find in clubs
-        if club_to_find['name'] == club
-    ][0]
-    found_competition = [
-        competition_to_find
-        for competition_to_find in competitions
-        if competition_to_find['name'] == competition
-    ][0]
+    try:
+        found_club = [
+            club_to_find
+            for club_to_find in clubs
+            if club_to_find['name'] == club
+        ][0]
+    except IndexError:
+        flash("Something went wrong-please try again")
+        return render_template('welcome.html',
+                               club=club,
+                               competitions=competitions)
+
+    try:
+        found_competition = [
+            competition_to_find
+            for competition_to_find in competitions
+            if competition_to_find['name'] == competition
+        ][0]
+    except IndexError:
+        flash("Something went wrong-please try again")
+        return render_template('welcome.html',
+                               club=club,
+                               competitions=competitions)
 
     competition_date = datetime.strptime(
         found_competition['date'],
@@ -82,16 +95,29 @@ def book(competition, club):
 def purchase_places():
     allready_booked_places = 0
 
-    competition = [
-        competition
-        for competition in competitions
-        if competition['name'] == request.form['competition']
-    ][0]
-    club = [
-        club
-        for club in clubs
-        if club['name'] == request.form['club']
-    ][0]
+    try:
+        competition = [
+            competition
+            for competition in competitions
+            if competition['name'] == request.form['competition']
+        ][0]
+    except IndexError:
+        flash("Competition does not existes !")
+        return render_template('welcome.html',
+                               club=request.form['club'],
+                               competitions=competitions)
+
+    try:
+        club = [
+            club
+            for club in clubs
+            if club['name'] == request.form['club']
+        ][0]
+    except IndexError:
+        flash("Club does not existes !")
+        return render_template('welcome.html',
+                               club=request.form['club'],
+                               competitions=competitions)
 
     if club['booked'] != {}:
         if competition['name'] in club['booked']:
