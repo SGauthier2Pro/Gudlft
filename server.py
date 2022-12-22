@@ -125,25 +125,31 @@ def purchase_places():
     )
 
     if competition_date > datetime.now():
-        if int(club['points']) >= places_required:
-            if (allready_booked_places + places_required) <= 12:
-                club['points'] = \
-                    int(club['points']) - places_required
-                competition['numberOfPlaces'] = \
-                    int(competition['numberOfPlaces']) - places_required
-                club['booked'][competition['name']] = \
-                    places_required + allready_booked_places
-                flash('Great-booking complete!')
-                return render_template('welcome.html',
-                                       club=club,
-                                       competitions=competitions)
+        if int(competition['numberOfPlaces']) >= places_required:
+            if int(club['points']) >= places_required:
+                if (allready_booked_places + places_required) <= 12:
+                    club['points'] = \
+                        int(club['points']) - places_required
+                    competition['numberOfPlaces'] = \
+                        int(competition['numberOfPlaces']) - places_required
+                    club['booked'][competition['name']] = \
+                        places_required + allready_booked_places
+                    flash('Great-booking complete!')
+                    return render_template('welcome.html',
+                                           club=club,
+                                           competitions=competitions)
+                else:
+                    flash('You can not purchase more than 12 places per event!')
+                    return render_template('booking.html',
+                                           club=club,
+                                           competition=competition)
             else:
-                flash('You can not purchase more than 12 places per event!')
+                flash('Not enough available points!')
                 return render_template('booking.html',
                                        club=club,
                                        competition=competition)
         else:
-            flash('Not enough available points!')
+            flash('Not enough available places!')
             return render_template('booking.html',
                                    club=club,
                                    competition=competition)

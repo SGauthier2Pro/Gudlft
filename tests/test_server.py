@@ -225,9 +225,9 @@ class TestServer:
             mock_competitions
     ):
         competitions = mock_competitions
-        competition = competitions[0]['name']
+        competition = competitions[2]['name']
         clubs = mock_clubs
-        club = clubs[1]['name']
+        club = clubs[2]['name']
         required_places = '10'
 
         response = client.post('/purchase_places',
