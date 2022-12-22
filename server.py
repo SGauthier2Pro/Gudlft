@@ -1,5 +1,6 @@
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for
+from datetime import datetime
 
 
 def load_clubs():
@@ -54,10 +55,22 @@ def book(competition, club):
         for competition_to_find in competitions
         if competition_to_find['name'] == competition
     ][0]
+
+    competition_date = datetime.strptime(
+        found_competition['date'],
+        "%Y-%m-%d %H:%M:%S"
+    )
+
     if found_club and found_competition:
-        return render_template('booking.html',
-                               club=found_club,
-                               competition=found_competition)
+        if competition_date > datetime.now():
+            return render_template('booking.html',
+                                   club=found_club,
+                                   competition=found_competition)
+        else:
+            flash("You can not book places for a past competition")
+            return render_template('welcome.html',
+                                   club=club,
+                                   competitions=competitions)
     else:
         flash("Something went wrong-please try again")
         return render_template('welcome.html',
@@ -106,24 +119,35 @@ def purchase_places():
 
     places_required = int(request.form['places'])
 
-    if int(club['points']) >= places_required:
-        if (allready_booked_places + places_required) <= 12:
-            club['points'] = int(club['points']) - places_required
-            competition['numberOfPlaces'] = \
-                int(competition['numberOfPlaces']) - places_required
-            club['booked'][competition['name']] = \
-                places_required + allready_booked_places
-            flash('Great-booking complete!')
-            return render_template('welcome.html',
-                                   club=club,
-                                   competitions=competitions)
+    competition_date = datetime.strptime(
+        competition['date'],
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    if competition_date > datetime.now():
+        if int(club['points']) >= places_required:
+            if (allready_booked_places + places_required) <= 12:
+                club['points'] = int(club['points']) - places_required
+                competition['numberOfPlaces'] = \
+                    int(competition['numberOfPlaces']) - places_required
+                club['booked'][competition['name']] = \
+                    places_required + allready_booked_places
+                flash('Great-booking complete!')
+                return render_template('welcome.html',
+                                       club=club,
+                                       competitions=competitions)
+            else:
+                flash('You can not purchase more than 12 places per event!')
+                return render_template('booking.html',
+                                       club=club,
+                                       competition=competition)
         else:
-            flash('You can not purchase more than 12 places per event!')
+            flash('Not enough available points!')
             return render_template('booking.html',
                                    club=club,
                                    competition=competition)
     else:
-        flash('Not enough available points!')
+        flash('You can not purchase places for a past competition')
         return render_template('booking.html',
                                club=club,
                                competition=competition)
