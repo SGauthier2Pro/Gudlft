@@ -63,3 +63,4 @@ def mock_competitions(mocker):
                                               'competitions',
                                               competitions)
     yield mocked_competitions
+

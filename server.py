@@ -3,23 +3,37 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 from datetime import datetime
 
 
-def load_clubs():
-    with open('clubs.json') as clubs_file:
-        list_of_clubs = json.load(clubs_file)['clubs']
-        return list_of_clubs
+CLUBS_DATA_FILE = 'clubs.json'
+COMPETITIONS_DATA_FILE = 'competitions.json'
 
 
-def load_competitions():
-    with open('competitions.json') as competitions_file:
-        list_of_competitions = json.load(competitions_file)['competitions']
-        return list_of_competitions
+class InvalidLoadFile(Exception):
+    pass
+
+
+def load_clubs(clubs_file):
+    try:
+        with open(clubs_file) as clubs_file:
+            list_of_clubs = json.load(clubs_file)['clubs']
+            return list_of_clubs
+    except (OSError, IOError, json.JSONDecodeError) as exception:
+        raise InvalidLoadFile(exception)
+
+
+def load_competitions(competitions_file):
+    try:
+        with open(competitions_file) as competitions_file:
+            list_of_competitions = json.load(competitions_file)['competitions']
+            return list_of_competitions
+    except (OSError, IOError, json.JSONDecodeError) as exception:
+        raise InvalidLoadFile(exception)
 
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
-competitions = load_competitions()
-clubs = load_clubs()
+competitions = load_competitions(COMPETITIONS_DATA_FILE)
+clubs = load_clubs(CLUBS_DATA_FILE)
 
 
 @app.route('/')

@@ -3,108 +3,7 @@ from tests.conftest import client, mock_clubs, mock_competitions
 import server
 
 
-class TestServer:
-    def test_index_route_should_status_code_ok(self, client):
-        response = client.get('/')
-        assert response.status_code == 200
-
-    def test_show_summary_route_with_valid_email(self,
-                                                 client,
-                                                 mock_clubs,
-                                                 mock_competitions):
-        clubs = mock_clubs
-        competitions = mock_competitions
-
-        response = client.post(
-            '/show_summary',
-            data=dict(email=clubs[0]['email']),
-            follow_redirects=True
-        )
-        assert response.status_code == 200
-        data = response.data.decode()
-        assert data.find(f"<h2>Welcome, {clubs[0]['email']} <//h2>") == -1
-        assert data.find(f"Points Available : {clubs[0]['points']}") == -1
-        for competition in competitions:
-            assert data.find(f"{competition['name']}<br />"
-                             f"Date: {competition['date']}</br> "
-                             f"Number of Places: "
-                             f"{competition['numberOfPlaces']}"
-                             f"") == -1
-
-    def test_show_summary_route_with_unknown_email(self, client):
-        response = client.post(
-            '/show_summary',
-            data=dict(email='unknown@email.net'),
-            follow_redirects=True
-        )
-        assert response.status_code == 200
-        data = response.data.decode()
-        assert data.find("This email is not registered !")
-
-    def test_book_route_with_good_competition_and_good_club(self,
-                                                            client,
-                                                            mock_clubs,
-                                                            mock_competitions):
-        clubs = mock_clubs
-        club = clubs[0]['name']
-        competitions = mock_competitions
-        competition = competitions[0]['name']
-
-        response = client.get(f'/book/{competition}/{club}')
-        assert response.status_code == 200
-
-    def test_book_route_with_unknown_competition_and_good_club(self,
-                                                               client,
-                                                               mock_clubs):
-        clubs = mock_clubs
-        club = clubs[0]['name']
-        competition = 'wrong competition'
-
-        response = client.get(f'/book/{competition}/{club}')
-        assert response.status_code == 200
-        data = response.data.decode()
-        assert data.find("Something went wrong-please try again") != -1
-
-    def test_book_route_with_good_competition_and_unknown_club(
-            self,
-            client,
-            mock_competitions
-    ):
-        club = 'wrong club'
-        competitions = mock_competitions
-        competition = competitions[0]['name']
-
-        response = client.get(f'/book/{competition}/{club}')
-        assert response.status_code == 200
-        data = response.data.decode()
-        assert data.find("Something went wrong-please try again") != -1
-
-    def test_book_route_with_unknown_competition_and_unknown_club(self,
-                                                                  client):
-        club = 'wrong club'
-        competition = 'wrong competition'
-
-        response = client.get(f'/book/{competition}/{club}')
-        assert response.status_code == 200
-        data = response.data.decode()
-        assert data.find("Something went wrong-please try again") != -1
-
-    def test_book_route_with_past_competition_and_valid_club(
-            self,
-            client,
-            mock_clubs,
-            mock_competitions
-    ):
-        competitions = mock_competitions
-        competition = competitions[1]['name']
-        clubs = mock_clubs
-        club = clubs[0]['name']
-
-        response = client.get(f'/book/{competition}/{club}')
-        assert response.status_code == 200
-        data = response.data.decode()
-        assert data.find("You can not book "
-                         "places for a past competition") != -1
+class TestPurchasePlaces:
 
     def test_purchase_places_with_club_competition_required_places(
             self,
@@ -327,8 +226,3 @@ class TestServer:
         data = response.data.decode()
 
         assert data.find("You have to enter a number of place !") != -1
-
-    def test_logout(self, client):
-        response = client.get('/logout',
-                              follow_redirects=True)
-        assert response.status_code == 200
