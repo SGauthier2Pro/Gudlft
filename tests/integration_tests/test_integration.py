@@ -16,6 +16,20 @@ class TestIntegration:
         assert data.find("<h1>Welcome to the "
                          "GUDLFT Registration Portal!<//h1>")
 
+    def test_boardpoints_route(self, client, mock_clubs_json_file):
+
+        server.clubs = server.load_clubs(mock_clubs_json_file.strpath)
+        self.clubs = server.clubs
+
+        response = client.get('/boardpoints')
+        data = response.data.decode()
+        assert data.find("<h2>Boardpoints of Clubs </h2>") != -1
+        assert data.find("<td>Club Name</td>") != -1
+        assert data.find("<td>Number of available points</td>") != -1
+        for club in self.clubs:
+            assert data.find(f"<td>{club['name']}</td>") != -1
+            assert data.find(f"<td>{club['points']}</td>") != -1
+
     def test_purchasing_routine(self,
                                 client,
                                 mock_clubs_json_file,
@@ -27,7 +41,6 @@ class TestIntegration:
             mock_competitions_json_file.strpath)
         self.competitions = server.competitions
 
-        print(self.clubs[0]['email'])
         # select  the club for test
         self.club = self.clubs[0]['name']
 
@@ -42,7 +55,6 @@ class TestIntegration:
 
         # check if the page contains what we expect
         data = response.data.decode()
-        print(data)
         assert data.find(f"<h2>Welcome, {self.clubs[0]['email']} </h2>") != -1
         assert data.find(f"Points available: {self.clubs[0]['points']}") != -1
         for competition in self.competitions:

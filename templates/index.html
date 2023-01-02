@@ -17,9 +17,11 @@
     Please enter your secretary email to continue:
     <form action="show_summary" method="post">
         <label for="email">Email:</label>
-        <input type="email" name="email" id=""/>
+        <input type="email" name="email" id="email"/>
         <button type="submit">Enter</button>
     </form>
     {%endwith%}
+    <br>
+    <a href="{{ url_for('boardpoints') }}">Click here to see the Boardpoints clubs</a>
 </body>
 </html>

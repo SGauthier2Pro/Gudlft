@@ -200,7 +200,10 @@ def purchase_places():
                                competition=competition)
 
 
-# TODO: Add route for points display
+@app.route('/boardpoints')
+def boardpoints():
+    return render_template('boardpoints.html',
+                           clubs=clubs)
 
 
 @app.route('/logout')
