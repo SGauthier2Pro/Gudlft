@@ -64,3 +64,36 @@ def mock_competitions(mocker):
                                               competitions)
     yield mocked_competitions
 
+
+@pytest.fixture
+def mock_clubs_json_file(tmpdir):
+    json_content = (
+        '{"clubs": [\n'
+        '   {\n'
+        '       "name": "Club 1",\n'
+        '       "email": "club1@test.net",\n'
+        '       "points": "13",\n'
+        '       "booked": {}\n'
+        '   }\n'
+        ']}\n'
+    )
+    temp_clubs_file = tmpdir.join('temp-clubs_file.json')
+    temp_clubs_file.write_text(json_content, encoding='utf-8')
+    yield temp_clubs_file
+
+
+@pytest.fixture
+def mock_competitions_json_file(tmpdir):
+    json_content = (
+        '{"competitions": [\n'
+        '   {\n'
+        '       "name": "Competition 1",\n'
+        '       "date": "2023-10-22 13:30:00",\n'
+        '       "numberOfPlaces": "13"\n'
+        '   }\n'
+        ']}\n'
+    )
+    temp_competitions_file = tmpdir.join('temp-competitions_file.json')
+    temp_competitions_file.write_text(json_content, encoding='utf-8')
+    yield temp_competitions_file
+
