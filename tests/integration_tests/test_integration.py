@@ -102,3 +102,11 @@ class TestIntegration:
                          f"            "
                          f"Number of Places: {competition_places_rest}") != -1
         assert data.find(f"Points available: {club_points_left}") != -1
+
+        # logout user
+        response = client.get('/logout')
+        assert response.status_code == 302
+        data = response.data.decode()
+        assert data.find("<h1>Welcome to the "
+                         "GUDLFT Registration Portal!<//h1>")
+        
