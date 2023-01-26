@@ -109,4 +109,3 @@ class TestIntegration:
         data = response.data.decode()
         assert data.find("<h1>Welcome to the "
                          "GUDLFT Registration Portal!<//h1>")
-        
