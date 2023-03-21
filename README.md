@@ -54,11 +54,11 @@
       <code>Python_Testing>pytest -v</code>
    
       it should return this result :
-      ![](../tests_reports.png)
+      ![tests_reports](https://user-images.githubusercontent.com/99419487/226555282-4e59b6e6-2935-4d01-a804-a75713cd2d49.png)
    
    2. run coverage with the following command to generate a coverage report :
       <code>Python_Testing>coverage html --directory=coverage server.py</code>
-      ![](../test coverage directory.png)
+      ![test coverage directory](https://user-images.githubusercontent.com/99419487/226555371-d545425f-19b4-4445-aca4-48bca74cd660.png)
    
       it should update the html report in coverage directory. You just had to launch index.html in your browser to see the report.
       1. running Locust :
@@ -71,9 +71,9 @@
          open the http://localhost:8089 address in your browser and enter 6 for <b>number of users</b> let the **spawn rate** at 1 and enter the adresse of your flask server
          as mentionned in the following picture and click on <b>Start swarming</b>
    
-         ![](../start_locust.png)
+         ![start_locust](https://user-images.githubusercontent.com/99419487/226555459-43828608-66c3-4bab-8f7c-40be8e34632f.png)
       
          you should get this kind of result
       (don't forget to stop locust to get the summary result)
    
-         ![](../locust_result.png)
+         ![locust_result](https://user-images.githubusercontent.com/99419487/226555500-8e2b985e-25a7-4f70-a8db-b2a8dfaa0082.png)
