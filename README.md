@@ -58,6 +58,7 @@
    
    2. run coverage with the following command to generate a coverage report :
       <code>Python_Testing>coverage html --directory=coverage server.py</code>
+      
       ![test coverage directory](https://user-images.githubusercontent.com/99419487/226555371-d545425f-19b4-4445-aca4-48bca74cd660.png)
 
    
