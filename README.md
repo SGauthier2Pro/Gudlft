@@ -58,6 +58,7 @@
    
    2. run coverage with the following command to generate a coverage report :
       <code>Python_Testing>coverage html --directory=coverage server.py</code>
+   3. 
       ![test coverage directory](https://user-images.githubusercontent.com/99419487/226555371-d545425f-19b4-4445-aca4-48bca74cd660.png)
    
       it should update the html report in coverage directory. You just had to launch index.html in your browser to see the report.
