@@ -44,6 +44,9 @@
           <option value="library.models.Book.objects" />
           <option value="favourites.models.FavouriteProduct.objects" />
           <option value="products.models.Product.objects" />
+          <option value="crmapi.models.client.Client.objects" />
+          <option value="crmapi.models.contract.Contract.objects" />
+          <option value="crmapi.models.event.Event.objects" />
         </list>
       </option>
     </inspection_tool>
