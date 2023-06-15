@@ -48,3 +48,32 @@
 
     We also like to show how well we're testing, so there's a module called 
     [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+
+6. Executing tests :
+   1. run pytest with the following command from the app root directory:
+      <code>Python_Testing>pytest -v</code>
+   
+      it should return this result :
+      ![](../tests_reports.png)
+   
+   2. run coverage with the following command to generate a coverage report :
+      <code>Python_Testing>coverage html --directory=coverage server.py</code>
+      ![](../test coverage directory.png)
+   
+      it should update the html report in coverage directory. You just had to launch index.html in your browser to see the report.
+      1. running Locust :
+         First, start the flask server with the following command :
+         <code>flask run</code>
+      
+         then, in another terminal start locust with the following command :
+         <code>Python_Testing>locust -f tests\performance_tests\locustfile.py</code>
+      
+         open the http://localhost:8089 address in your browser and enter 6 for <b>number of users</b> let the **spawn rate** at 1 and enter the adresse of your flask server
+         as mentionned in the following picture and click on <b>Start swarming</b>
+   
+         ![](../start_locust.png)
+      
+         you should get this kind of result
+      (don't forget to stop locust to get the summary result)
+   
+         ![](../locust_result.png)
