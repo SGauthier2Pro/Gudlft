@@ -18,7 +18,7 @@ gevent==23.9.1
 geventhttpclient==2.0.8
 greenlet==2.0.1
 h11==0.14.0
-idna==3.4
+idna==3.7
 iniconfig==1.1.1
 itsdangerous==2.1.2
 Jinja2==3.1.4
